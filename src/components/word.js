@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
 function Square(props) {
@@ -16,18 +16,13 @@ function Square(props) {
 }
 class Word extends Component {
 
-
-   state = {
-      word : ['y','a','h','y','a']    
-   }
-
-  
-
   render() {
+
+    
     return (
       <div style={{display:'flex',flexDrection: 'row'}}>
         
-        {this.state.word.map((square, index) => { return <Square lettre={this.state.word[index]} /> })}          
+        {this.props.attempt.map((square, index) => { return <Square lettre={this.props.attempt[index]} /> })}          
       </div>
     );
   }

@@ -11,13 +11,10 @@ class Box extends Component {
       }         
     
     render() {
-      console.log('attempts'+this.props.nbrAttempts)
-      var grid = Array(this.props.nbrAttempts).fill(0).map(row => new Array(this.props.wordLenght).fill(' '))
-      console.log(grid)
-      
+            
     return (
       <div style={{display:'flex',flexDirection:'column'}} >
-         {grid.map((attempt,index)=>{ return(<Word/>) })}
+         {this.props.grid.map((attempt,index)=>{ return(<Word key={index} attempt={attempt}/>) })}
       </div>
     );
   }
