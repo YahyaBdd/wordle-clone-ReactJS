@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 import words from './words.txt';
 
 
-function renderDefaultGrid(rows, cols) {
+function renderGrid(rows, cols) {
   let grid = [];
   for (let i = 0; i < rows; i++) {
     let row = [];
@@ -18,13 +18,26 @@ function renderDefaultGrid(rows, cols) {
   
 }
 
-function App() {
+const generateWordList = async () => {
+  let wordList;
+  await fetch(words)
+    .then((response) => response.text())
+    .then((result) => {
+      const wordArr = result.split("\n");
+      //todaysWord = wordArr[Math.floor(Math.random() * wordArr.length)];
+      wordList = wordArr;
+    });
+  return { wordList };
+};
 
-  //const [boxParam, setBoxParam] = useState({nbrAttempts: 4, wordLenght : 4,});
-  // const [attempt, setAttempt] = useState({attempt: 0, lettre: 0});
-  //const [currentWord,setCurrentWord] = useState('')
+function App() {
+  //console.log('App started');
+  const [wordList, setwordList] = useState([]);
+  console.log(wordList)
+  const [currentWord,setCurrentWord] = useState("");
+  console.log(`current word is ${currentWord}`);
   const [grid, setGrid] = useState(
-    {grid: renderDefaultGrid(4,4),
+    {grid: renderGrid(6,5),
       row: 0,
       col: 0,
     }
@@ -33,26 +46,18 @@ function App() {
    useEffect(()=>{
     let handleKeyDown = (e) =>{
     
-      let newGrid = grid.grid;
-      console.log('1st newGrid ', newGrid);
-  
+      let newGrid = grid.grid;  
       if(grid.col<grid.grid[0].length){
-        console.log('if is true');
-        console.log(`row ${grid.row} col ${grid.col}`);
+        
         newGrid[grid.row][grid.col] = e.key;
-        console.log('modified newGrid :', newGrid);
+        
         setGrid({
             grid: newGrid,
             row: grid.row,
             col: grid.col+1,
-        })
-        //document.removeEventListener('keydown',handleKeyDown,true)
-        
+        })        
               
-      } else {
-        console.log('else is true');
-        console.log(`row ${grid.row} col ${grid.col}`);
-  
+      } else {  
         newGrid[grid.row+1][0] = e.key;
   
         setGrid({
@@ -63,38 +68,41 @@ function App() {
       }
       
     }
-
+    console.log('useEffect for click handelling called');
     document.addEventListener('keydown',handleKeyDown,true)
     return ()=>{
       document.removeEventListener('keydown',handleKeyDown,true)
     }
    },[grid])
-
-  //  useEffect(()=>{
-  //   setCurrentWord(generateWordSet())
+   useEffect(()=>{
+    console.log('useEffect for wordList called');
+    generateWordList().then(({wordList})=>{
+      
+      setwordList(wordList);
+      setCurrentWord("react");
+      
+    }
+    )
+  },[])
     
-  //  },[setCurrentWord])
 
   let renderBox = ()=>{
-    setGrid({
-      grid: renderDefaultGrid(document.getElementById('nbAttempts').value,document.getElementById('wordLength').value),
-      row: 0,
-      col: 0,
-    })
+    let rndmWord;
+    let wrdLength = parseInt(document.getElementById("wordLength").value);
+    let wrdList = wordList.filter((word)=>{
+      return word.length === wrdLength
+    });
+    rndmWord = wrdList[Math.floor(Math.random() * wrdList.length)];
+    setCurrentWord(rndmWord);
+    
+     setGrid({
+       grid: renderGrid(document.getElementById('nbAttempts').value,document.getElementById('wordLength').value),
+       row: 0,
+       col: 0,
+     })
   }
 
-  //let generateWordSet = async () => {
-    
-  //   let todaysWord;
-  //   await fetch(words)
-  //     .then((response) => response.text())
-  //     .then((result) => {
-  //       const wordArr = result.split("\n");
-  //       todaysWord = wordArr[Math.floor(Math.random() * wordArr.length)];
-  //       //console.log(todaysWord)
-  //     });
-  //   return todaysWord ;
-  // };
+
 
   
 
@@ -110,9 +118,10 @@ function App() {
       <input type="number" id="wordLength"/>
 
       <button onClick={()=>renderBox()}>OK</button>
+      <p>currentWord = {currentWord}</p> 
       
 
-      <Box grid={grid.grid}/>
+      <Box grid={grid.grid} currentWord={currentWord}/>
       
     </div>
   );
