@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { Component } from "react";
 import "../App.css";
 
 function Lettre(props) {
@@ -6,68 +6,28 @@ function Lettre(props) {
     if (props.currentWord.includes(props.playerGuess)) {
       if (props.playerGuess === props.currentWord[props.index]) {
         return (
-          <div style={{ width: "125px", height: "125px" }}>
-            <p
-              style={{
-                width: "100%",
-                height: "100%",
-                backgroundColor: "green",
-                border: "3px",
-                borderStyle: "solid",
-              }}
-            >
-              {props.playerGuess}{" "}
-            </p>
+          <div className="lettre">
+            <p className="default green-overlay">{props.playerGuess} </p>
           </div>
         );
       } else {
         return (
-          <div style={{ width: "125px", height: "125px" }}>
-            <p
-              style={{
-                width: "100%",
-                height: "100%",
-                backgroundColor: "yellow",
-                border: "3px",
-                borderStyle: "solid",
-              }}
-            >
-              {props.playerGuess}{" "}
-            </p>
+          <div className="lettre">
+            <p className="default yellow-overlay">{props.playerGuess} </p>
           </div>
         );
       }
     } else {
       return (
-        <div style={{ width: "125px", height: "125px" }}>
-          <p
-            style={{
-              width: "100%",
-              height: "100%",
-              backgroundColor: "red",
-              border: "3px",
-              borderStyle: "solid",
-            }}
-          >
-            {props.playerGuess}{" "}
-          </p>
+        <div className="lettre">
+          <p className="default grey-overlay">{props.playerGuess} </p>
         </div>
       );
     }
   } else {
     return (
-      <div style={{ width: "125px", height: "125px" }}>
-        <p
-          style={{
-            width: "100%",
-            height: "100%",
-            backgroundColor: "white",
-            border: "3px",
-            borderStyle: "solid",
-          }}
-        >
-          {props.playerGuess}{" "}
-        </p>
+      <div className="lettre">
+        <p className="default">{props.playerGuess} </p>
       </div>
     );
   }
@@ -76,7 +36,7 @@ function Lettre(props) {
 class Attempt extends Component {
   render() {
     return (
-      <div style={{ display: "flex", flexDrection: "row", gap: "1rem" }}>
+      <div className="attempt">
         <p>{this.props.verifieAtt}</p>
 
         {this.props.attempt.map((square, index) => {

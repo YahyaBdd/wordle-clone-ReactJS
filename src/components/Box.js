@@ -5,7 +5,7 @@ import "../App.css";
 class Box extends Component {
   render() {
     return (
-      <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+      <div className="grid">
         {this.props.grid.map((attempt, index) => {
           return (
             <Attempt
