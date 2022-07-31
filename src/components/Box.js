@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import Attempt from "./Attempt";
+import "../App.css";
 
 class Box extends Component {
   render() {
     return (
-      <div style={{ display: "flex", flexDirection: "column" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
         {this.props.grid.map((attempt, index) => {
           return (
             <Attempt
