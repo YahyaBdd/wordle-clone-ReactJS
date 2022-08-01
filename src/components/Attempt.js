@@ -33,26 +33,45 @@ function Lettre(props) {
   }
 }
 
-class Attempt extends Component {
-  render() {
-    return (
-      <div className="attempt">
-        <p>{this.props.verifieAtt}</p>
+function Attempt(props) {
+  return (
+    <div className="attempt">
+      <p>{props.verifieAtt}</p>
 
-        {this.props.attempt.map((square, index) => {
-          return (
-            <Lettre
-              key={index}
-              index={index}
-              playerGuess={this.props.attempt[index]}
-              currentWord={this.props.currentWord}
-              verifieAtt={this.props.verifieAtt}
-            />
-          );
-        })}
-      </div>
-    );
-  }
+      {props.attempt.map((square, index) => {
+        return (
+          <Lettre
+            key={index}
+            index={index}
+            playerGuess={props.attempt[index]}
+            currentWord={props.currentWord}
+            verifieAtt={props.verifieAtt}
+          />
+        );
+      })}
+    </div>
+  );
 }
+// class Attempt extends Component {
+//   render() {
+//     return (
+//       <div className="attempt">
+//         <p>{this.props.verifieAtt}</p>
+
+//         {this.props.attempt.map((square, index) => {
+//           return (
+//             <Lettre
+//               key={index}
+//               index={index}
+//               playerGuess={this.props.attempt[index]}
+//               currentWord={this.props.currentWord}
+//               verifieAtt={this.props.verifieAtt}
+//             />
+//           );
+//         })}
+//       </div>
+//     );
+//   }
+// }
 
 export default Attempt;

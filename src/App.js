@@ -1,30 +1,7 @@
 import "./App.css";
 import Box from "./components/Box";
 import { useState, useEffect } from "react";
-import words from "./words.txt";
-
-function renderGrid(rows, cols) {
-  let grid = [];
-  for (let i = 0; i < rows; i++) {
-    let row = [];
-    for (let j = 0; j < cols; j++) {
-      row.push(" ");
-    }
-    grid.push(row);
-  }
-  return grid;
-}
-
-const generateWordList = async () => {
-  let wordList;
-  await fetch(words)
-    .then((response) => response.text())
-    .then((result) => {
-      const wordArr = result.split("\n");
-      wordList = wordArr;
-    });
-  return { wordList };
-};
+import { renderGrid, generateWordList } from "./utilityFunctions";
 
 function App() {
   const [wordList, setwordList] = useState([]);
@@ -32,6 +9,7 @@ function App() {
   const [gameOver, setgameOver] = useState({ over: false, winner: false });
   const [verifieAtt, setverifieAtt] = useState(Array(6).fill(false));
   const [grid, setGrid] = useState({ grid: renderGrid(6, 5), row: 0, col: 0 });
+
   useEffect(() => {
     generateWordList().then(({ wordList }) => {
       setwordList(wordList);
@@ -62,46 +40,18 @@ function App() {
       ) {
         let newGrid = grid.grid;
         if (grid.col < grid.grid[0].length) {
-          newGrid[grid.row][grid.col] = e.key;
-
-          setGrid({
-            grid: newGrid,
-            row: grid.row,
-            col: grid.col + 1,
-          });
+          nextLettre(e, newGrid);
         }
       } else if (e.key === "Enter" && grid.col === currentWord.length) {
         if (currentWord === grid.grid[grid.row].join("")) {
-          let newVerifieAtt = verifieAtt;
-          newVerifieAtt[grid.row] = true;
-          setverifieAtt(newVerifieAtt);
-          setgameOver({ over: true, winner: true });
+          gameWon(true);
         } else if (grid.row === grid.grid.length - 1) {
-          let newVerifieAtt = verifieAtt;
-          newVerifieAtt[grid.row] = true;
-          setverifieAtt(newVerifieAtt);
-          setgameOver({ over: true, winner: false });
+          gameWon(false);
         } else {
-          setverifieAtt((prev) => {
-            prev[grid.row] = true;
-            return prev;
-          });
-          setGrid({
-            grid: grid.grid,
-            row: grid.row + 1,
-            col: 0,
-          });
+          nextAttempt();
         }
       } else if (e.key === "Backspace") {
-        if (grid.col > 0) {
-          let newGrid = grid.grid;
-          newGrid[grid.row][grid.col - 1] = " ";
-          setGrid({
-            grid: newGrid,
-            row: grid.row,
-            col: grid.col - 1,
-          });
-        }
+        deleteChar();
       }
     };
 
@@ -110,6 +60,48 @@ function App() {
       document.removeEventListener("keydown", handleKeyDown, true);
     };
   }, [grid]);
+
+  const nextAttempt = () => {
+    setverifieAtt((prev) => {
+      prev[grid.row] = true;
+      return prev;
+    });
+    setGrid({
+      grid: grid.grid,
+      row: grid.row + 1,
+      col: 0,
+    });
+  };
+
+  const nextLettre = (e, newGrid) => {
+    newGrid[grid.row][grid.col] = e.key;
+    setGrid({
+      grid: newGrid,
+      row: grid.row,
+      col: grid.col + 1,
+    });
+  };
+
+  const gameWon = (won) => {
+    let newVerifieAtt = verifieAtt;
+    newVerifieAtt[grid.row] = true;
+    setverifieAtt(newVerifieAtt);
+    if (won) {
+      setgameOver({ over: true, winner: true });
+    } else {
+      setgameOver({ over: true, winner: false });
+    }
+  };
+
+  const deleteChar = () => {
+    let newGrid = grid.grid;
+    newGrid[grid.row][grid.col - 1] = " ";
+    setGrid({
+      grid: newGrid,
+      row: grid.row,
+      col: grid.col - 1,
+    });
+  };
 
   let renderBox = (row, col) => {
     let rndmWord;
@@ -206,7 +198,6 @@ function App() {
           OK
         </button>
       </div>
-      {/* <p>currentWord = {currentWord}</p> */}
       <div className="game">
         <Box
           grid={grid.grid}
