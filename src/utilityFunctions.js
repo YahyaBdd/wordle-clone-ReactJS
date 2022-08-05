@@ -13,15 +13,19 @@ export function renderGrid(rows, cols) {
 }
 
 export const generateWordList = async () => {
-  let wordArr;
+  let wordList;
+
+  function getLength(word) {
+    return word.length;
+  }
 
   try {
     const response = await fetch(words);
     const result = await response.text();
-    wordArr = result.split("\n");
+    wordList = result.split("\n");
   } catch (err) {
     throw new Error(err);
   }
 
-  return { wordArr };
+  return { wordList };
 };
