@@ -15,10 +15,6 @@ export function renderGrid(rows, cols) {
 export const generateWordList = async () => {
   let wordList;
 
-  function getLength(word) {
-    return word.length;
-  }
-
   try {
     const response = await fetch(words);
     const result = await response.text();
