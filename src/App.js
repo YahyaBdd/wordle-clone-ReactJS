@@ -121,11 +121,11 @@ function App() {
     const attemptsCount = parseInt(document.getElementById("nbAttempts").value);
     const wordLength = parseInt(document.getElementById("wordLength").value);
 
-    if (wordLength > 22) {
+    if (wordLength <= 0 || wordLength > 22) {
       alert("Please enter word length between 1 and 22");
       document.getElementById("nbAttempts").value = "";
       document.getElementById("wordLength").value = "";
-    } else if (attemptsCount < 0) {
+    } else if (attemptsCount <= 0) {
       alert("Number of attempts must be higher than 0");
       document.getElementById("nbAttempts").value = "";
       document.getElementById("wordLength").value = "";
