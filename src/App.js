@@ -191,8 +191,8 @@ function App() {
 
         <button
           onClick={() => {
-            let x = parseInt(document.getElementById("nbAttempts").value);
-            let y = parseInt(document.getElementById("wordLength").value);
+            const x = parseInt(document.getElementById("nbAttempts").value);
+            const y = parseInt(document.getElementById("wordLength").value);
             renderBox(x, y);
           }}
         >
