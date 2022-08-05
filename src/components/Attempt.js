@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import "../App.css";
 
 function Lettre(props) {
@@ -52,26 +52,5 @@ function Attempt(props) {
     </div>
   );
 }
-// class Attempt extends Component {
-//   render() {
-//     return (
-//       <div className="attempt">
-//         <p>{this.props.verifieAtt}</p>
-
-//         {this.props.attempt.map((square, index) => {
-//           return (
-//             <Lettre
-//               key={index}
-//               index={index}
-//               playerGuess={this.props.attempt[index]}
-//               currentWord={this.props.currentWord}
-//               verifieAtt={this.props.verifieAtt}
-//             />
-//           );
-//         })}
-//       </div>
-//     );
-//   }
-// }
 
 export default Attempt;

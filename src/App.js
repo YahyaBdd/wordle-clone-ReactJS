@@ -15,6 +15,7 @@ function App() {
       setwordList(wordList);
     });
   }, []);
+
   useEffect(() => {
     if (gameOver.over) {
       if (gameOver.winner) {
@@ -137,7 +138,7 @@ function App() {
             width="16"
             height="16"
             fill="currentColor"
-            class="bi bi-github"
+            className="bi bi-github"
             viewBox="0 0 16 16"
           >
             {" "}
@@ -163,7 +164,7 @@ function App() {
             width="16"
             height="16"
             fill="currentColor"
-            class="bi bi-stack-overflow"
+            className="bi bi-stack-overflow"
             viewBox="0 0 16 16"
           >
             {" "}
