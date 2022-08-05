@@ -14,11 +14,14 @@ export function renderGrid(rows, cols) {
 
 export const generateWordList = async () => {
   let wordList;
-  await fetch(words)
-    .then((response) => response.text())
-    .then((result) => {
-      const wordArr = result.split("\n");
-      wordList = wordArr;
-    });
+
+  try {
+    const response = await fetch(words);
+    const result = await response.text();
+    wordList = result.split("\n");
+  } catch (err) {
+    throw new Error(err);
+  }
+
   return { wordList };
 };

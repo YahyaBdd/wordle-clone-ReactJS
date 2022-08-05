@@ -4,17 +4,18 @@ import { useState, useEffect } from "react";
 import { renderGrid, generateWordList } from "./utilityFunctions";
 
 function App() {
-  const [wordList, setwordList] = useState([]);
+  const [wordList, setWordList] = useState([]);
   const [currentWord, setCurrentWord] = useState("react");
-  const [gameOver, setgameOver] = useState({ over: false, winner: false });
-  const [verifieAtt, setverifieAtt] = useState(Array(6).fill(false));
+  const [gameOver, setGameOver] = useState({ over: false, winner: false });
+  const [verifieAtt, setVerifieAtt] = useState(Array(6).fill(false));
   const [grid, setGrid] = useState({ grid: renderGrid(6, 5), row: 0, col: 0 });
 
   useEffect(() => {
     generateWordList().then(({ wordList }) => {
-      setwordList(wordList);
+      setWordList(wordList);
     });
   }, []);
+
   useEffect(() => {
     if (gameOver.over) {
       if (gameOver.winner) {
@@ -32,7 +33,7 @@ function App() {
   }, [gameOver]);
 
   useEffect(() => {
-    let handleKeyDown = (e) => {
+    const handleKeyDown = (e) => {
       if (
         e.key.length === 1 &&
         e.key.match(/[a-z]/i) &&
@@ -62,7 +63,7 @@ function App() {
   }, [grid]);
 
   const nextAttempt = () => {
-    setverifieAtt((prev) => {
+    setVerifieAtt((prev) => {
       prev[grid.row] = true;
       return prev;
     });
@@ -83,18 +84,18 @@ function App() {
   };
 
   const gameWon = (won) => {
-    let newVerifieAtt = verifieAtt;
+    const newVerifieAtt = verifieAtt;
     newVerifieAtt[grid.row] = true;
-    setverifieAtt(newVerifieAtt);
+    setVerifieAtt(newVerifieAtt);
     if (won) {
-      setgameOver({ over: true, winner: true });
+      setGameOver({ over: true, winner: true });
     } else {
-      setgameOver({ over: true, winner: false });
+      setGameOver({ over: true, winner: false });
     }
   };
 
   const deleteChar = () => {
-    let newGrid = grid.grid;
+    const newGrid = grid.grid;
     newGrid[grid.row][grid.col - 1] = " ";
     setGrid({
       grid: newGrid,
@@ -103,19 +104,34 @@ function App() {
     });
   };
 
-  let renderBox = (row, col) => {
+  const renderBox = (row, col) => {
     let rndmWord;
-    let wrdList = wordList.filter((word) => {
-      return word.length === col;
-    });
+    const wrdList = wordList.filter((word) => word.length === col);
     rndmWord = wrdList[Math.floor(Math.random() * wrdList.length)];
     setCurrentWord(rndmWord);
-    setverifieAtt(Array(rndmWord.length).fill(false));
+    setVerifieAtt(Array(rndmWord.length).fill(false));
     setGrid({
       grid: renderGrid(row, col),
       row: 0,
       col: 0,
     });
+  };
+
+  const handleClick = () => {
+    const attemptsCount = parseInt(document.getElementById("nbAttempts").value);
+    const wordLength = parseInt(document.getElementById("wordLength").value);
+
+    if (wordLength <= 0 || wordLength > 22) {
+      alert("Please enter word length between 1 and 22");
+      document.getElementById("nbAttempts").value = "";
+      document.getElementById("wordLength").value = "";
+    } else if (attemptsCount <= 0) {
+      alert("Number of attempts must be higher than 0");
+      document.getElementById("nbAttempts").value = "";
+      document.getElementById("wordLength").value = "";
+    } else {
+      renderBox(attemptsCount, wordLength);
+    }
   };
 
   return (
@@ -137,7 +153,7 @@ function App() {
             width="16"
             height="16"
             fill="currentColor"
-            class="bi bi-github"
+            className="bi bi-github"
             viewBox="0 0 16 16"
           >
             {" "}
@@ -163,7 +179,7 @@ function App() {
             width="16"
             height="16"
             fill="currentColor"
-            class="bi bi-stack-overflow"
+            className="bi bi-stack-overflow"
             viewBox="0 0 16 16"
           >
             {" "}
@@ -183,20 +199,12 @@ function App() {
       </div>
       <div className="controls">
         <label htmlFor="nbAttempts">Attempts</label>
-        <input type="number" id="nbAttempts" />
+        <input type="number" id="nbAttempts" min="1" />
 
-        <label htmlFor="nbAttempts">Word length</label>
-        <input type="number" id="wordLength" />
+        <label htmlFor="wordLength">Word length</label>
+        <input type="number" id="wordLength" min="1" />
 
-        <button
-          onClick={() => {
-            let x = parseInt(document.getElementById("nbAttempts").value);
-            let y = parseInt(document.getElementById("wordLength").value);
-            renderBox(x, y);
-          }}
-        >
-          OK
-        </button>
+        <button onClick={handleClick}>OK</button>
       </div>
       <div className="game">
         <Box
